@@ -1,5 +1,5 @@
 {
-  "name": "MFU Course Registration System",
-  "description": "A prototype course registration system featuring a virtual queue, GPA tracking, and course management as described in the V&V assignment.",
+  "name": "MFU REG Peak-Time Stabilizer",
+  "description": "A prototype for the MFU REG website featuring peak-time stabilization, virtual queueing, and transactional course registration.",
   "requestFramePermissions": []
 }

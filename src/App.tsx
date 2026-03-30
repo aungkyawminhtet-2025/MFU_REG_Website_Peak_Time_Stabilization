@@ -65,8 +65,21 @@ export default function App() {
   const [queuePosition, setQueuePosition] = useState<number | null>(null);
   const [eta, setEta] = useState<number | null>(null);
   const [notifications, setNotifications] = useState<{ id: string; message: string; type: 'success' | 'error' }[]>([]);
+  const [auditLogs, setAuditLogs] = useState<{ id: string; action: string; time: string; user: string }[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // --- Effects ---
+
+  // Log critical actions
+  const logAction = (action: string) => {
+    const newLog = {
+      id: Math.random().toString(36).substr(2, 9),
+      action,
+      time: new Date().toLocaleTimeString(),
+      user: user?.id || 'System'
+    };
+    setAuditLogs(prev => [newLog, ...prev].slice(0, 20));
+  };
 
   // Simulate Queue Progression
   useEffect(() => {
@@ -77,6 +90,7 @@ export default function App() {
             clearInterval(interval);
             setTimeout(() => {
               addNotification('Your turn has arrived!', 'success');
+              logAction('Queue turn arrived');
               setView('search');
               setQueuePosition(null);
             }, 1000);
@@ -85,7 +99,7 @@ export default function App() {
           return prev - 1;
         });
         setEta(prev => (prev !== null && prev > 0 ? prev - 0.5 : 0));
-      }, 3000); // Every 3 seconds position drops
+      }, 3000);
       return () => clearInterval(interval);
     }
   }, [view, queuePosition]);
@@ -108,9 +122,11 @@ export default function App() {
     setUser({ id, name: 'Aung Kaung Set' });
     setView('dashboard');
     addNotification('Logged in via SSO', 'success');
+    logAction('User Login via SSO');
   };
 
   const handleLogout = () => {
+    logAction('User Logout');
     setUser(null);
     setView('login');
     setQueuePosition(null);
@@ -118,6 +134,7 @@ export default function App() {
 
   const handleRegisterClick = () => {
     if (isPeakMode) {
+      logAction('Entered Virtual Queue');
       setQueuePosition(50);
       setEta(15);
       setView('queue');
@@ -126,37 +143,69 @@ export default function App() {
     }
   };
 
-  const registerCourse = (courseId: string) => {
+  const registerCourse = async (courseId: string) => {
+    setIsProcessing(true);
     const course = MOCK_COURSES.find(c => c.id === courseId);
     if (!course) return;
 
+    // Simulate transactional delay
+    await new Promise(resolve => setTimeout(resolve, 1200));
+
     if (course.seats <= 0) {
       addNotification('Course is full!', 'error');
+      setIsProcessing(false);
       return;
     }
 
     if (registeredCourses.includes(courseId)) {
       addNotification('Already registered for this course', 'error');
+      setIsProcessing(false);
       return;
     }
 
     setRegisteredCourses(prev => [...prev, courseId]);
     addNotification(`Successfully registered for ${course.code}`, 'success');
+    logAction(`Registered Course: ${course.code}`);
+    setIsProcessing(false);
   };
 
-  const dropCourse = (courseId: string) => {
-    // Simulate DEF-07 (Drop period check)
-    const isDropPeriodClosed = false; // Toggle this for testing
-    if (isDropPeriodClosed) {
-      addNotification('Drop period is closed. You cannot drop this course.', 'error');
-      return;
-    }
+  const dropCourse = async (courseId: string) => {
+    setIsProcessing(true);
+    const course = MOCK_COURSES.find(c => c.id === courseId);
+    
+    // Simulate transactional delay
+    await new Promise(resolve => setTimeout(resolve, 800));
 
     setRegisteredCourses(prev => prev.filter(id => id !== courseId));
     addNotification('Course dropped successfully', 'success');
+    logAction(`Dropped Course: ${course?.code || courseId}`);
+    setIsProcessing(false);
+  };
+
+  const togglePeakMode = () => {
+    const newState = !isPeakMode;
+    setIsPeakMode(newState);
+    logAction(`Peak Mode ${newState ? 'Enabled' : 'Disabled'}`);
+    addNotification(`Peak Mode ${newState ? 'Enabled' : 'Disabled'}`, 'success');
   };
 
   // --- Render Helpers ---
+
+  const renderStatusBanner = () => (
+    <AnimatePresence>
+      {isPeakMode && (
+        <motion.div 
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          className="bg-orange-600 text-white py-2 px-4 text-center text-sm font-bold flex items-center justify-center gap-2 overflow-hidden"
+        >
+          <Clock size={16} />
+          <span>SYSTEM STATUS: PEAK MODE ACTIVE - VIRTUAL QUEUE ENABLED FOR REGISTRATION</span>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   const renderLogin = () => (
     <div className="min-h-screen flex items-center justify-center bg-[#f5f5f5]">
@@ -239,11 +288,12 @@ export default function App() {
   );
 
   return (
-    <div className="font-sans text-gray-900 bg-[#f8f9fa] min-h-screen">
+    <div className="font-sans text-gray-900 bg-[#f8f9fa] min-h-screen flex flex-col">
+      {renderStatusBanner()}
       {view === 'login' ? renderLogin() : (
-        <div className="flex">
+        <div className="flex flex-1">
           {renderSidebar()}
-          <main className="flex-1 p-8 max-w-6xl mx-auto">
+          <main className="flex-1 p-8 max-w-6xl mx-auto w-full">
             <AnimatePresence mode="wait">
               {view === 'dashboard' && (
                 <motion.div key="dashboard" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
@@ -278,10 +328,11 @@ export default function App() {
                               </div>
                             </div>
                             <button 
+                              disabled={isProcessing}
                               onClick={() => dropCourse(id)}
-                              className="text-sm text-gray-400 hover:text-red-600 font-medium"
+                              className={`text-sm font-medium transition-colors ${isProcessing ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400 hover:text-red-600'}`}
                             >
-                              Drop
+                              {isProcessing ? 'Processing...' : 'Drop'}
                             </button>
                           </div>
                         ) : null;
@@ -362,17 +413,19 @@ export default function App() {
                             </p>
                           </div>
                           <button 
-                            disabled={course.seats === 0 || registeredCourses.includes(course.id)}
+                            disabled={course.seats === 0 || registeredCourses.includes(course.id) || isProcessing}
                             onClick={() => registerCourse(course.id)}
                             className={`px-6 py-3 rounded-xl font-bold transition-all ${
                               registeredCourses.includes(course.id) 
                                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                                 : course.seats === 0 
                                   ? 'bg-red-50 text-red-400 cursor-not-allowed'
-                                  : 'bg-orange-600 text-white hover:bg-orange-700 shadow-lg shadow-orange-100 active:scale-95'
+                                  : isProcessing
+                                    ? 'bg-orange-300 text-white cursor-wait'
+                                    : 'bg-orange-600 text-white hover:bg-orange-700 shadow-lg shadow-orange-100 active:scale-95'
                             }`}
                           >
-                            {registeredCourses.includes(course.id) ? 'Registered' : course.seats === 0 ? 'Full' : 'Add Course'}
+                            {registeredCourses.includes(course.id) ? 'Registered' : course.seats === 0 ? 'Full' : isProcessing ? 'Adding...' : 'Add Course'}
                           </button>
                         </div>
                       </div>
@@ -383,7 +436,15 @@ export default function App() {
 
               {view === 'gpa' && (
                 <motion.div key="gpa" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  <h2 className="text-3xl font-bold mb-8">GPA Results</h2>
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-3xl font-bold">GPA Results</h2>
+                    {isPeakMode && (
+                      <div className="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-full border border-blue-100 flex items-center gap-1">
+                        <Clock size={12} />
+                        CACHED VIEW ENABLED
+                      </div>
+                    )}
+                  </div>
                   
                   <div className="grid grid-cols-1 gap-6">
                     {['1/2023', '2/2023', '1/2024', '2/2024'].map(term => {
@@ -434,28 +495,51 @@ export default function App() {
                     <button onClick={() => setView('login')} className="text-sm text-gray-500 hover:underline">Back to Login</button>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-                      <h3 className="font-bold text-lg mb-6">System Controls</h3>
-                      <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
-                        <div>
-                          <p className="font-bold">Peak Registration Mode</p>
-                          <p className="text-sm text-gray-500">Enables virtual queue for all users</p>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div className="lg:col-span-2 space-y-6">
+                      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                        <h3 className="font-bold text-lg mb-6">System Controls</h3>
+                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+                          <div>
+                            <p className="font-bold">Peak Registration Mode</p>
+                            <p className="text-sm text-gray-500">Enables virtual queue for all users</p>
+                          </div>
+                          <button 
+                            onClick={togglePeakMode}
+                            className={`w-14 h-8 rounded-full transition-colors relative ${isPeakMode ? 'bg-orange-600' : 'bg-gray-300'}`}
+                          >
+                            <motion.div 
+                              animate={{ x: isPeakMode ? 24 : 0 }}
+                              className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-sm" 
+                            />
+                          </button>
                         </div>
-                        <button 
-                          onClick={() => setIsPeakMode(!isPeakMode)}
-                          className={`w-14 h-8 rounded-full transition-colors relative ${isPeakMode ? 'bg-orange-600' : 'bg-gray-300'}`}
-                        >
-                          <div className={`absolute top-1 w-6 h-6 bg-white rounded-full transition-all ${isPeakMode ? 'left-7' : 'left-1'}`} />
-                        </button>
+                      </div>
+
+                      <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                        <h3 className="font-bold text-lg mb-6">Real-Time Metrics</h3>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="p-4 bg-gray-50 rounded-2xl">
+                            <p className="text-xs text-gray-400 font-bold uppercase mb-1">Latency</p>
+                            <p className="text-xl font-black text-green-600">42ms</p>
+                          </div>
+                          <div className="p-4 bg-gray-50 rounded-2xl">
+                            <p className="text-xs text-gray-400 font-bold uppercase mb-1">Error Rate</p>
+                            <p className="text-xl font-black text-gray-900">0.02%</p>
+                          </div>
+                          <div className="p-4 bg-gray-50 rounded-2xl">
+                            <p className="text-xs text-gray-400 font-bold uppercase mb-1">Active Users</p>
+                            <p className="text-xl font-black text-gray-900">1,240</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
+                    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm flex flex-col">
                       <h3 className="font-bold text-lg mb-6">Queue Health</h3>
-                      <div className="space-y-4">
+                      <div className="space-y-4 flex-1">
                         <div className="flex justify-between items-end">
-                          <p className="text-sm text-gray-500">Current Queue Size</p>
+                          <p className="text-sm text-gray-500">Queue Size</p>
                           <p className="text-2xl font-black">242 users</p>
                         </div>
                         <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -467,6 +551,17 @@ export default function App() {
                             Critical: Queue size exceeds 500 users!
                           </div>
                         )}
+                        <div className="pt-4 border-t border-gray-50">
+                          <p className="text-xs text-gray-400 font-bold uppercase mb-3">Audit Logs</p>
+                          <div className="space-y-2 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                            {auditLogs.map(log => (
+                              <div key={log.id} className="text-[10px] p-2 bg-gray-50 rounded-lg border border-gray-100">
+                                <span className="font-bold text-orange-600">{log.time}</span> • {log.action}
+                                <p className="text-gray-400 mt-0.5">User: {log.user}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
