@@ -1,1 +1,87 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-mfu-red: #934338;
+  --color-mfu-orange: #f27d26;
+  --color-mfu-bg: #fcfcfc;
+  --color-mfu-table-header: #934338;
+  --color-mfu-table-row-even: #f9f9f9;
+  --color-mfu-border: #e2e8f0;
+  --color-mfu-text-main: #333333;
+  --color-mfu-text-muted: #666666;
+}
+
+@layer base {
+  body {
+    @apply bg-mfu-bg text-mfu-text-main antialiased font-sans;
+  }
+}
+
+/* MFU Specific UI Components */
+.mfu-card {
+  @apply bg-white rounded-lg border border-mfu-border shadow-sm overflow-hidden;
+}
+
+.mfu-table {
+  @apply w-full text-left border-collapse text-sm;
+}
+
+.mfu-table thead tr {
+  @apply bg-mfu-table-header text-white font-bold;
+}
+
+.mfu-table th, .mfu-table td {
+  @apply px-4 py-3 border border-mfu-border;
+}
+
+.mfu-table tbody tr:nth-child(even) {
+  @apply bg-mfu-table-row-even;
+}
+
+.mfu-btn-primary {
+  @apply bg-mfu-red text-white px-4 py-2 rounded font-bold hover:bg-red-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.mfu-btn-outline {
+  @apply border border-mfu-red text-mfu-red px-4 py-2 rounded font-bold hover:bg-red-50 transition-colors;
+}
+
+.mfu-input {
+  @apply w-full px-3 py-2 rounded border border-mfu-border focus:outline-none focus:ring-1 focus:ring-mfu-red transition-all;
+}
+
+.mfu-accordion-header {
+  @apply flex justify-between items-center px-4 py-3 bg-white border-b border-mfu-border cursor-pointer hover:bg-slate-50 transition-colors font-bold text-slate-700;
+}
+
+.mfu-sidebar-item {
+  @apply flex items-center gap-3 px-4 py-2 text-sm font-medium transition-all hover:bg-slate-50 border-l-4 border-transparent;
+}
+
+.mfu-sidebar-item-active {
+  @apply bg-red-50 text-mfu-red border-mfu-red font-bold;
+}
+
+.mfu-sidebar-category {
+  @apply px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-between;
+}
+
+/* Timetable Grid */
+.timetable-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(14, 1fr);
+  border: 1px solid var(--color-mfu-border);
+}
+
+.timetable-cell {
+  @apply border border-mfu-border p-2 text-[10px] text-center min-h-[60px] flex flex-col justify-center;
+}
+
+.timetable-header {
+  @apply bg-slate-50 font-bold text-slate-500;
+}
+
+.course-block {
+  @apply bg-red-50 border border-mfu-red text-mfu-red p-1 rounded text-[9px] font-bold leading-tight;
+}
