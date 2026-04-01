@@ -122,7 +122,7 @@ export default function App() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setUser({ id: '6831503002', name: 'Aung Kyaw Phyo', email: '6831503002@lamduan.mfu.ac.th' });
+    setUser({ id: '6831503333', name: 'David Lee', email: '6831503333@lamduan.mfu.ac.th' });
     setView('dashboard');
     addNotification('Welcome back, Aung Kyaw Phyo', 'success');
   };

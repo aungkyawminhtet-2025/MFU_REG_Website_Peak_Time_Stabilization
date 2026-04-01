@@ -3,6 +3,9 @@ import { motion } from "motion/react";
 import { Eye, EyeOff } from "lucide-react";
 import logo from "../../assets/logo.png";
 
+import { LuLockKeyhole } from "react-icons/lu";
+
+
 interface LoginProps {
   handleLogin: (e: React.FormEvent) => void;
   showPassword: boolean;
@@ -84,12 +87,7 @@ export function Login({
               type="submit"
               className="w-40 mx-auto flex items-center justify-center gap-2 border border-mfu-red rounded-full py-2 text-mfu-red font-bold hover:bg-mfu-red hover:text-white transition-all"
             >
-              <img
-                src="https://portal.mfu.ac.th/login/assets/img/sso-icon.png"
-                alt="SSO"
-                className="w-5 h-5"
-                referrerPolicy="no-referrer"
-              />
+              <LuLockKeyhole size={18} />
               MFU SSO
             </button>
           </form>

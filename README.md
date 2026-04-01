@@ -6,7 +6,7 @@
 
 This contains everything you need to run your app locally.
 
-View your app in AI Studio: https://ai.studio/apps/8ed5d2be-defb-41ec-86c6-703eb3832b3e
+View Our Demo Website : https://mfu-reg-website-peak-time-stabiliza.vercel.app/
 
 ## Run Locally
 
