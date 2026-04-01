@@ -1,4 +1,4 @@
-export type View = 'login' | 'dashboard' | 'schedule' | 'grades' | 'pre-reg' | 'exit-exam' | 'admin' | 'queue';
+export type View = 'login' | 'dashboard' | 'schedule' | 'grades' | 'pre-reg' | 'exit-exam' | 'admin' | 'queue' | 'enrollment-results' | 'search-instructor' | 'login-history';
 
 export interface Course {
   id: string;
@@ -50,4 +50,28 @@ export interface Notification {
   id: string;
   message: string;
   type: 'info' | 'success' | 'error';
+}
+
+export interface EnrollmentResult {
+  code: string;
+  name: string;
+  section: string;
+  gradeMode: string;
+  credit: number;
+}
+
+export interface Instructor {
+  id: string;
+  name: string;
+  surname: string;
+  school: string;
+}
+
+export interface LoginHistoryRecord {
+  no: number;
+  date: string;
+  time: string;
+  loginHistory: string;
+  ip: string;
+  remark: string;
 }

@@ -104,5 +104,3 @@ export function Grades({ selectedTerm, setSelectedTerm }: GradesProps) {
    </div>
  );
 }
-
-

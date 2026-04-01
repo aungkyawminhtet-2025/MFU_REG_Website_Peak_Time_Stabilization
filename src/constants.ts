@@ -1,4 +1,4 @@
-import { Course, Activity, GradeRecord, ScheduleItem } from './types';
+import { Course, Activity, GradeRecord, ScheduleItem, EnrollmentResult, Instructor, LoginHistoryRecord } from './types';
 
 export const MOCK_COURSES: Course[] = [
   { id: '1', code: '1006134', name: 'English for Communication 1', faculty: 'Liberal Arts', day: 'Mon', time: '09:00-12:00', credits: 3, capacity: 40, remainingSeats: 5 },
@@ -51,4 +51,26 @@ export const SCHEDULE: ScheduleItem[] = [
   { code: '1006135', type: 'LECT-33', section: 'C2 308', room: 'C2 308', day: 1, start: 13, duration: 3 },
   { code: '1501114', type: 'LECT-2', section: 'E4 A 811', room: 'E4 A 811', day: 2, start: 9, duration: 3 },
   { code: '1305104', type: 'LAB-1', section: 'S1 401', room: 'S1 401', day: 2, start: 13, duration: 3 },
+];
+
+export const ENROLLMENT_RESULTS: EnrollmentResult[] = [
+  { code: '1006135', name: 'English for Communication 2', section: '33', gradeMode: 'A - F', credit: 3 },
+  { code: '1305102', name: 'Introduction to Software Engineering', section: '01', gradeMode: 'A - F', credit: 3 },
+  { code: '1305104', name: 'Object Oriented Design and Programming', section: '01', gradeMode: 'A - F', credit: 3 },
+  { code: '1305109', name: 'User Interface and User Experience Design', section: '01', gradeMode: 'A - F', credit: 3 },
+  { code: '1501114', name: 'Mathematics for Engineering 1', section: '02', gradeMode: 'A - F', credit: 3 },
+  { code: '1501118', name: 'Data Structures and Algorithms', section: '03', gradeMode: 'A - F', credit: 3 },
+];
+
+export const INSTRUCTORS: Instructor[] = [
+  { id: '1', name: 'John', surname: 'Doe', school: 'School of Information Technology' },
+  { id: '2', name: 'Jane', surname: 'Smith', school: 'School of Management' },
+  { id: '3', name: 'Somsak', surname: 'Rakthai', school: 'School of Liberal Arts' },
+  { id: '4', name: 'Wichai', surname: 'Jaidee', school: 'School of Science' },
+];
+
+export const LOGIN_HISTORY: LoginHistoryRecord[] = [
+  { no: 1, date: '01 Apr 2026', time: '09:30:15', loginHistory: 'Login Success', ip: '192.168.1.1', remark: 'Chrome on Windows' },
+  { no: 2, date: '31 Mar 2026', time: '14:20:05', loginHistory: 'Login Success', ip: '192.168.1.1', remark: 'Chrome on Windows' },
+  { no: 3, date: '30 Mar 2026', time: '10:15:45', loginHistory: 'Login Success', ip: '10.0.0.5', remark: 'Safari on iPhone' },
 ];

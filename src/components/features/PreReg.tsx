@@ -16,6 +16,7 @@ interface PreRegProps {
  handleSubmitRegistration: () => void;
  isProcessing: boolean;
  totalCredits: number;
+ courseCapacities: Record<string, number>;
 }
 
 
@@ -30,7 +31,8 @@ export function PreReg({
  handleAddCourse,
  handleSubmitRegistration,
  isProcessing,
- totalCredits
+ totalCredits,
+ courseCapacities
 }: PreRegProps) {
  const filteredCourses = MOCK_COURSES.filter(c =>
    (c.code.includes(searchQuery) || c.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
@@ -87,44 +89,50 @@ export function PreReg({
                  </tr>
                </thead>
                <tbody>
-                 {filteredCourses.map(course => (
-                   <tr key={course.id}>
-                     <td className="font-bold text-mfu-red">{course.code}</td>
-                     <td>{course.name}</td>
-                     <td className="text-xs">{course.faculty}</td>
-                     <td className="text-xs">{course.day} {course.time}</td>
-                     <td>
-                       <span className={course.remainingSeats > 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>
-                         {course.remainingSeats}/{course.capacity}
-                       </span>
-                     </td>
-                     <td>
-                       <button
-                         onClick={() => {
-                           if (registeredCourses.includes(course.id)) {
-                             handleDropCourse(course.id);
-                           } else if (submittedCourses.includes(course.id)) {
-                             handleDropCourse(course.id, true);
-                           } else {
-                             handleAddCourse(course);
-                           }
-                         }}
-                         disabled={isProcessing || (course.remainingSeats <= 0 && !registeredCourses.includes(course.id) && !submittedCourses.includes(course.id))}
-                         className={`px-4 py-1 rounded-full text-xs font-bold transition-all ${
-                           registeredCourses.includes(course.id)
-                             ? 'bg-slate-100 text-mfu-red hover:bg-red-50 border border-mfu-red/20'
-                             : submittedCourses.includes(course.id)
-                             ? 'bg-green-50 text-green-600 border border-green-200 hover:bg-red-50 hover:text-mfu-red hover:border-mfu-red/20'
-                             : course.remainingSeats <= 0
-                             ? 'bg-red-50 text-red-400 cursor-not-allowed'
-                             : 'bg-mfu-red text-white hover:bg-red-800'
-                         }`}
-                       >
-                         {registeredCourses.includes(course.id) ? 'Remove' : submittedCourses.includes(course.id) ? 'Drop' : 'Add'}
-                       </button>
-                     </td>
-                   </tr>
-                 ))}
+                 {filteredCourses.map(course => {
+                   const currentCapacity = courseCapacities[course.id];
+                   const enrolledCount = course.capacity - course.remainingSeats;
+                   const currentRemaining = Math.max(0, currentCapacity - enrolledCount);
+                   
+                   return (
+                     <tr key={course.id}>
+                       <td className="font-bold text-mfu-red">{course.code}</td>
+                       <td>{course.name}</td>
+                       <td className="text-xs">{course.faculty}</td>
+                       <td className="text-xs">{course.day} {course.time}</td>
+                       <td>
+                         <span className={currentRemaining > 0 ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>
+                           {currentRemaining}/{currentCapacity}
+                         </span>
+                       </td>
+                       <td>
+                         <button
+                           onClick={() => {
+                             if (registeredCourses.includes(course.id)) {
+                               handleDropCourse(course.id);
+                             } else if (submittedCourses.includes(course.id)) {
+                               handleDropCourse(course.id, true);
+                             } else {
+                               handleAddCourse(course);
+                             }
+                           }}
+                           disabled={isProcessing || (currentRemaining <= 0 && !registeredCourses.includes(course.id) && !submittedCourses.includes(course.id))}
+                           className={`px-4 py-1 rounded-full text-xs font-bold transition-all ${
+                             registeredCourses.includes(course.id)
+                               ? 'bg-slate-100 text-mfu-red hover:bg-red-50 border border-mfu-red/20'
+                               : submittedCourses.includes(course.id)
+                               ? 'bg-green-50 text-green-600 border border-green-200 hover:bg-red-50 hover:text-mfu-red hover:border-mfu-red/20'
+                               : currentRemaining <= 0
+                               ? 'bg-red-50 text-red-400 cursor-not-allowed'
+                               : 'bg-mfu-red text-white hover:bg-red-800'
+                           }`}
+                         >
+                           {registeredCourses.includes(course.id) ? 'Remove' : submittedCourses.includes(course.id) ? 'Drop' : 'Add'}
+                         </button>
+                       </td>
+                     </tr>
+                   );
+                 })}
                </tbody>
              </table>
            </div>

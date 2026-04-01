@@ -45,8 +45,8 @@ export function Sidebar({
         <CategoryHeader label="General Menu" isOpen={expandedMenus.includes('General Menu')} onToggle={() => toggleMenu('General Menu')} />
         {expandedMenus.includes('General Menu') && (
           <div className="bg-slate-50/30">
-            <SidebarItem icon={<FileSearch size={18} />} label="Search Instructor Schedule" active={false} onClick={() => {}} isSub />
-            <SidebarItem icon={<History size={18} />} label="Login History" active={false} onClick={() => {}} isSub />
+            <SidebarItem icon={<FileSearch size={18} />} label="Search Instructor Schedule" active={view === 'search-instructor'} onClick={() => setView('search-instructor')} isSub />
+            <SidebarItem icon={<History size={18} />} label="Login History" active={view === 'login-history'} onClick={() => setView('login-history')} isSub />
             <SidebarItem icon={<UserCheck size={18} />} label="Admin Dashboard" active={view === 'admin'} onClick={() => setView('admin')} isSub />
           </div>
         )}
@@ -54,7 +54,7 @@ export function Sidebar({
         <CategoryHeader label="Student Menu" isOpen={expandedMenus.includes('Student Menu')} onToggle={() => toggleMenu('Student Menu')} />
         {expandedMenus.includes('Student Menu') && (
           <div className="bg-slate-50/30">
-            <SidebarItem icon={<ClipboardList size={18} />} label="Enrollment Results" active={false} onClick={() => {}} isSub />
+            <SidebarItem icon={<ClipboardList size={18} />} label="Enrollment Results" active={view === 'enrollment-results'} onClick={() => setView('enrollment-results')} isSub />
             <SidebarItem icon={<Calendar size={18} />} label="Student Schedule Check" active={view === 'schedule'} onClick={() => setView('schedule')} isSub />
             <SidebarItem icon={<GraduationCap size={18} />} label="Grade Results" active={view === 'grades'} onClick={() => navigateToProtectedView('grades')} isSub />
             <SidebarItem icon={<LayoutDashboard size={18} />} label="Programme Structure" active={false} onClick={() => {}} isSub />

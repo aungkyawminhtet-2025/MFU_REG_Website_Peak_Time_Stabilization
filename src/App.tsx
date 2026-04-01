@@ -17,6 +17,9 @@ import { Grades } from './components/features/Grades';
 import { PreReg } from './components/features/PreReg';
 import { Queue } from './components/features/Queue';
 import { Admin } from './components/features/Admin';
+import { EnrollmentResults } from './components/features/EnrollmentResults';
+import { SearchInstructor } from './components/features/SearchInstructor';
+import { LoginHistory } from './components/features/LoginHistory';
 
 export default function App() {
   const [view, setView] = useState<View>('login');
@@ -25,12 +28,21 @@ export default function App() {
   const [showPassword, setShowPassword] = useState(false);
 
   // Peak Mode & Queue State
-  const [isPeakMode, setIsPeakMode] = useState(false);
-  const [isQueued, setIsQueued] = useState(false);
-  const [queuePosition, setQueuePosition] = useState(0);
-  const [eta, setEta] = useState(0);
-  const [hasAccessToken, setHasAccessToken] = useState(false);
+  const [isPreRegPeakMode, setIsPreRegPeakMode] = useState(false);
+  const [isGradesPeakMode, setIsGradesPeakMode] = useState(false);
+  
+  const [isPreRegQueued, setIsPreRegQueued] = useState(false);
+  const [preRegQueuePosition, setPreRegQueuePosition] = useState(0);
+  const [preRegEta, setPreRegEta] = useState(0);
+
+  const [isGradesQueued, setIsGradesQueued] = useState(false);
+  const [gradesQueuePosition, setGradesQueuePosition] = useState(0);
+  const [gradesEta, setGradesEta] = useState(0);
+
+  const [hasPreRegAccessToken, setHasPreRegAccessToken] = useState(false);
+  const [hasGradesAccessToken, setHasGradesAccessToken] = useState(false);
   const [queuedTargetView, setQueuedTargetView] = useState<View | null>(null);
+  const [activeQueueType, setActiveQueueType] = useState<'pre-reg' | 'grades' | null>(null);
 
   // Grades State
   const [selectedTerm, setSelectedTerm] = useState('1/2025');
@@ -50,7 +62,7 @@ export default function App() {
   const [systemMetrics, setSystemMetrics] = useState({
     activeUsers: 1242,
     errors: 0.02,
-    queueSize: 156,
+    queueSize: 100,
     traffic: Array.from({ length: 24 }).map((_, i) => ({
       time: `${i}:00`,
       value: Math.floor(Math.random() * 2000) + 500
@@ -70,34 +82,52 @@ export default function App() {
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (isQueued && queuePosition > 0) {
+    if ((isPreRegQueued && preRegQueuePosition > 0) || (isGradesQueued && gradesQueuePosition > 0)) {
       timer = setInterval(() => {
-        setQueuePosition(prev => {
-          const nextPos = prev - Math.floor(Math.random() * 5 + 1);
-          const newPos = nextPos > 0 ? nextPos : 0;
-          setEta((newPos * 1.5) / 60);
-          return newPos;
-        });
-      }, 3000);
+        if (isPreRegQueued && preRegQueuePosition > 0) {
+          setPreRegEta(prev => {
+            const nextEta = prev > 0 ? prev - (1/60) : 0;
+            setPreRegQueuePosition(Math.ceil(nextEta * 100));
+            return nextEta;
+          });
+        }
+        if (isGradesQueued && gradesQueuePosition > 0) {
+          setGradesEta(prev => {
+            const nextEta = prev > 0 ? prev - (1/60) : 0;
+            setGradesQueuePosition(Math.ceil(nextEta * 100));
+            return nextEta;
+          });
+        }
+      }, 1000);
     }
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isQueued, queuePosition]);
+  }, [isPreRegQueued, preRegQueuePosition, isGradesQueued, gradesQueuePosition]);
 
   // Handle redirection when queue reaches zero
   useEffect(() => {
-    if (isQueued && queuePosition === 0) {
-      setHasAccessToken(true);
-      setIsQueued(false);
-      addNotification('It is your turn! Access granted.', 'success');
-      
-      if (queuedTargetView) {
-        setView(queuedTargetView);
+    if (isPreRegQueued && preRegQueuePosition === 0) {
+      setHasPreRegAccessToken(true);
+      setIsPreRegQueued(false);
+      addNotification('Registration Access granted!', 'success');
+      if (queuedTargetView === 'pre-reg') {
+        setView('pre-reg');
         setQueuedTargetView(null);
+        setActiveQueueType(null);
       }
     }
-  }, [isQueued, queuePosition, queuedTargetView]);
+    if (isGradesQueued && gradesQueuePosition === 0) {
+      setHasGradesAccessToken(true);
+      setIsGradesQueued(false);
+      addNotification('Grades Access granted!', 'success');
+      if (queuedTargetView === 'grades') {
+        setView('grades');
+        setQueuedTargetView(null);
+        setActiveQueueType(null);
+      }
+    }
+  }, [isPreRegQueued, preRegQueuePosition, isGradesQueued, gradesQueuePosition, queuedTargetView]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -122,7 +152,7 @@ export default function App() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setUser({ id: '6831503333', name: 'David Lee', email: '6831503333@lamduan.mfu.ac.th' });
+    setUser({ id: '6831503002', name: 'Aung Kyaw Phyo', email: '6831503002@lamduan.mfu.ac.th' });
     setView('dashboard');
     addNotification('Welcome back, Aung Kyaw Phyo', 'success');
   };
@@ -134,16 +164,36 @@ export default function App() {
   };
 
   const navigateToProtectedView = (targetView: View) => {
-    if (isPeakMode && !hasAccessToken) {
-      setIsQueued(true);
-      setQueuePosition(Math.floor(Math.random() * 50) + 100);
-      setEta(3.5);
-      setQueuedTargetView(targetView);
+    const isPreRegTarget = targetView === 'pre-reg';
+    const isGradesTarget = targetView === 'grades';
+    
+    if (isPreRegTarget && isPreRegPeakMode && !hasPreRegAccessToken) {
+      if (!isPreRegQueued) {
+        setIsPreRegQueued(true);
+        setPreRegQueuePosition(100);
+        setPreRegEta(1.0); // 1 minute
+        addNotification('Registration traffic detected. You have been placed in the queue.', 'info');
+      }
+      setQueuedTargetView('pre-reg');
+      setActiveQueueType('pre-reg');
       setView('queue');
-      addNotification('High traffic detected. You have been placed in the queue.', 'info');
-    } else {
-      setView(targetView);
+      return;
     }
+
+    if (isGradesTarget && isGradesPeakMode && !hasGradesAccessToken) {
+      if (!isGradesQueued) {
+        setIsGradesQueued(true);
+        setGradesQueuePosition(100);
+        setGradesEta(1.0); // 1 minute
+        addNotification('Grades traffic detected. You have been placed in the queue.', 'info');
+      }
+      setQueuedTargetView('grades');
+      setActiveQueueType('grades');
+      setView('queue');
+      return;
+    }
+
+    setView(targetView);
   };
 
   const handleAddCourse = (course: Course) => {
@@ -219,7 +269,14 @@ export default function App() {
       user={user}
       view={view}
       setView={setView}
-      isPeakMode={isPeakMode}
+      isPeakMode={isPreRegPeakMode || isGradesPeakMode}
+      isPreRegQueued={isPreRegQueued}
+      preRegQueuePosition={preRegQueuePosition}
+      preRegEta={preRegEta}
+      isGradesQueued={isGradesQueued}
+      gradesQueuePosition={gradesQueuePosition}
+      gradesEta={gradesEta}
+      setActiveQueueType={setActiveQueueType}
       expandedMenus={expandedMenus}
       toggleMenu={toggleMenu}
       navigateToProtectedView={navigateToProtectedView}
@@ -230,6 +287,7 @@ export default function App() {
         <Dashboard 
           user={user} 
           setView={setView} 
+          navigateToProtectedView={navigateToProtectedView}
           submittedCourses={submittedCourses} 
           handleDropCourse={handleDropCourse} 
         />
@@ -249,19 +307,31 @@ export default function App() {
           handleSubmitRegistration={handleSubmitRegistration}
           isProcessing={isProcessing}
           totalCredits={totalCredits}
+          courseCapacities={courseCapacities}
         />
       )}
-      {view === 'queue' && <Queue queuePosition={queuePosition} eta={eta} />}
+      {view === 'queue' && (
+        <Queue 
+          queuePosition={activeQueueType === 'pre-reg' ? preRegQueuePosition : gradesQueuePosition} 
+          eta={activeQueueType === 'pre-reg' ? preRegEta : gradesEta} 
+          title={activeQueueType === 'pre-reg' ? "Registration Waiting Room" : "Grades Waiting Room"}
+        />
+      )}
       {view === 'admin' && (
         <Admin 
-          isPeakMode={isPeakMode}
-          setIsPeakMode={setIsPeakMode}
+          isPreRegPeakMode={isPreRegPeakMode}
+          setIsPreRegPeakMode={setIsPreRegPeakMode}
+          isGradesPeakMode={isGradesPeakMode}
+          setIsGradesPeakMode={setIsGradesPeakMode}
           addNotification={addNotification}
           systemMetrics={systemMetrics}
           courseCapacities={courseCapacities}
           setCourseCapacities={setCourseCapacities}
         />
       )}
+      {view === 'enrollment-results' && <EnrollmentResults />}
+      {view === 'search-instructor' && <SearchInstructor />}
+      {view === 'login-history' && <LoginHistory />}
       {view === 'exit-exam' && (
         <div className="flex flex-col items-center justify-center py-20 text-center space-y-6">
           <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center">

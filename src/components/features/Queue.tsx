@@ -5,16 +5,17 @@ import { motion } from 'motion/react';
 interface QueueProps {
   queuePosition: number;
   eta: number;
+  title?: string;
 }
 
-export function Queue({ queuePosition, eta }: QueueProps) {
+export function Queue({ queuePosition, eta, title = "Virtual Waiting Room" }: QueueProps) {
   return (
     <div className="flex flex-col items-center justify-center py-20 max-w-2xl mx-auto text-center space-y-8">
       <div className="w-24 h-24 bg-mfu-red/10 text-mfu-red rounded-full flex items-center justify-center animate-pulse">
         <Clock size={48} />
       </div>
       <div className="space-y-2">
-        <h2 className="text-4xl font-medium text-mfu-text-main">Virtual Waiting Room</h2>
+        <h2 className="text-4xl font-medium text-mfu-text-main">{title}</h2>
         <p className="text-mfu-text-muted">High traffic detected. Please stay on this page to maintain your position in the queue.</p>
       </div>
 
@@ -25,7 +26,10 @@ export function Queue({ queuePosition, eta }: QueueProps) {
         </div>
         <div className="mfu-card p-8 space-y-2">
           <p className="text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Estimated Wait</p>
-          <p className="text-5xl font-bold text-mfu-text-main">{Math.ceil(eta)} <span className="text-xl">min</span></p>
+          <p className="text-5xl font-bold text-mfu-text-main">
+            {Math.floor(Math.round(eta * 60) / 60)}:{String(Math.round(eta * 60) % 60).padStart(2, '0')} 
+            <span className="text-xl ml-2">min</span>
+          </p>
         </div>
       </div>
 
@@ -33,7 +37,7 @@ export function Queue({ queuePosition, eta }: QueueProps) {
         <motion.div 
           className="h-full bg-mfu-red"
           initial={{ width: '0%' }}
-          animate={{ width: `${100 - (queuePosition / 150) * 100}%` }}
+          animate={{ width: `${100 - (queuePosition / 100) * 100}%` }}
         />
       </div>
 

@@ -16,42 +16,43 @@ import { MOCK_COURSES, ACTIVITIES } from '../../constants';
 
 
 interface DashboardProps {
- user: User | null;
- setView: (view: View) => void;
- submittedCourses: string[];
- handleDropCourse: (courseId: string, isSubmitted?: boolean) => void;
+  user: User | null;
+  setView: (view: View) => void;
+  navigateToProtectedView: (view: View) => void;
+  submittedCourses: string[];
+  handleDropCourse: (courseId: string, isSubmitted?: boolean) => void;
 }
 
 
-export function Dashboard({ user, setView, submittedCourses, handleDropCourse }: DashboardProps) {
- return (
-   <div className="space-y-8">
-     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-       <div className="lg:col-span-2 space-y-8">
-         {/* Main Focus: Registered Courses */}
-         <div className="space-y-4">
-           <div className="flex items-center justify-between">
-             <h2 className="text-3xl font-medium text-mfu-text-main">Registered Courses</h2>
-             <span className="text-[10px] font-bold text-mfu-red bg-red-50 px-2 py-1 rounded uppercase tracking-widest">Semester 2/2025</span>
-           </div>
-           <div className="mfu-card p-6">
-             {submittedCourses.length === 0 ? (
-               <div className="text-center py-12 space-y-4">
-                 <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
-                   <ClipboardList size={32} className="text-mfu-text-muted opacity-20" />
-                 </div>
-                 <div>
-                   <p className="text-sm font-bold text-mfu-text-muted uppercase tracking-widest">No active registrations</p>
-                   <p className="text-xs text-mfu-text-muted mt-1">Start your pre-registration to see courses here.</p>
-                 </div>
-                 <button
-                   onClick={() => setView('pre-reg')}
-                   className="px-6 py-2 bg-mfu-red text-white text-xs font-bold rounded-lg hover:bg-red-800 transition-all"
-                 >
-                   Go to Pre-Registration
-                 </button>
-               </div>
-             ) : (
+export function Dashboard({ user, setView, navigateToProtectedView, submittedCourses, handleDropCourse }: DashboardProps) {
+  return (
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          {/* Main Focus: Registered Courses */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-3xl font-medium text-mfu-text-main">Registered Courses</h2>
+              <span className="text-[10px] font-bold text-mfu-red bg-red-50 px-2 py-1 rounded uppercase tracking-widest">Semester 2/2025</span>
+            </div>
+            <div className="mfu-card p-6">
+              {submittedCourses.length === 0 ? (
+                <div className="text-center py-12 space-y-4">
+                  <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto">
+                    <ClipboardList size={32} className="text-mfu-text-muted opacity-20" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-mfu-text-muted uppercase tracking-widest">No active registrations</p>
+                    <p className="text-xs text-mfu-text-muted mt-1">Start your pre-registration to see courses here.</p>
+                  </div>
+                  <button
+                    onClick={() => navigateToProtectedView('pre-reg')}
+                    className="px-6 py-2 bg-mfu-red text-white text-xs font-bold rounded-lg hover:bg-red-800 transition-all"
+                  >
+                    Go to Pre-Registration
+                  </button>
+                </div>
+              ) : (
                <div className="overflow-x-auto">
                  <table className="mfu-table">
                    <thead>
