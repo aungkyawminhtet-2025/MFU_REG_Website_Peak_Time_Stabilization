@@ -1,6 +1,7 @@
 import React from 'react';
 import { Globe, ChevronDown } from 'lucide-react';
 import { User } from '../../types';
+import logo from '../../assets/logo.png';
 
 interface TopNavProps {
   user: User | null;
@@ -10,7 +11,7 @@ export function TopNav({ user }: TopNavProps) {
   return (
     <header className="h-16 bg-white border-b border-mfu-border flex items-center justify-between px-6 sticky top-0 z-50">
       <div className="flex items-center gap-4">
-        <img src="https://upload.wikimedia.org/wikipedia/th/a/a2/Mae_Fah_Luang_University_Logo.png" alt="MFU" className="h-14" referrerPolicy="no-referrer" />
+        <img src={logo} alt="MFU" className="h-14" />
         <div className="h-10 w-[1px] bg-slate-200" />
         <div>
           <h1 className="text-xl font-bold text-mfu-text-main leading-none tracking-tight">PORTAL.MFU</h1>

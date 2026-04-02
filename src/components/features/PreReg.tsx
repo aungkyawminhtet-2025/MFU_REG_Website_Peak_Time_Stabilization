@@ -55,11 +55,11 @@ export function PreReg({
        <div className="lg:col-span-2 space-y-6">
          <div className="mfu-card p-6 space-y-4">
            <div className="flex flex-col md:flex-row gap-4">
-             <div className="flex-1 relative">
+             <div className="w-12 relative">
                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-mfu-text-muted" />
                <input
                  type="text"
-                 placeholder="Search by Course Code or Name..."
+                //  placeholder="Search by Course Code or Name..."
                  className="mfu-input pl-10"
                  value={searchQuery}
                  onChange={(e) => setSearchQuery(e.target.value)}

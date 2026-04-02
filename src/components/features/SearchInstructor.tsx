@@ -27,7 +27,7 @@ export function SearchInstructor() {
             <div className="relative">
               <input 
                 type="text" 
-                placeholder="Please Enter Name To Search" 
+                placeholder="Enter Instructor Name" 
                 className="mfu-input pr-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -40,7 +40,7 @@ export function SearchInstructor() {
             <div className="relative">
               <input 
                 type="text" 
-                placeholder="Please Enter Surname To Search" 
+                placeholder="Enter Surname" 
                 className="mfu-input pr-10"
                 value={searchSurname}
                 onChange={(e) => setSearchSurname(e.target.value)}
