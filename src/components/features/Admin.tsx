@@ -171,7 +171,7 @@ export function Admin({
              {MOCK_COURSES.map(course => (
                <tr key={course.id}>
                  <td className="font-bold text-mfu-red">{course.code}</td>
-                 <td className="text-sm">{course.name}</td>
+                 <td className="text-base">{course.name}</td>
                  <td className="text-center font-bold">{courseCapacities[course.id]}</td>
                  <td>
                    <div className="flex items-center gap-2">

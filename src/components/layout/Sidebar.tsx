@@ -63,7 +63,7 @@ export function Sidebar({
           onToggle={() => toggleMenu("General Menu")}
         />
         {expandedMenus.includes("General Menu") && (
-          <div className="bg-slate-50/30">
+          <div className="bg-slate-50/30 ">
             <SidebarItem
               icon={<FileSearch size={18} />}
               label="Search Instructor Schedule"

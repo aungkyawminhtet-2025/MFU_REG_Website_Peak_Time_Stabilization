@@ -11,9 +11,9 @@ export function CategoryHeader({ label, isOpen, onToggle }: CategoryHeaderProps)
   return (
     <button 
       onClick={onToggle}
-      className="w-full flex items-center justify-between px-4 py-3 text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest hover:bg-slate-50 transition-colors"
+      className="w-full flex items-center justify-between px-4 py-3 text-[13px] font-bold text-black uppercase tracking-widest hover:bg-slate-50 transition-colors"
     >
-      <span>{label}</span>
+      <span className='text-[13px] text-black'>{label}</span>
       {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
     </button>
   );

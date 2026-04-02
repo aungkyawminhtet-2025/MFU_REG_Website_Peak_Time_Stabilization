@@ -2,6 +2,7 @@ import React from 'react';
 import { Globe, ChevronDown } from 'lucide-react';
 import { User } from '../../types';
 import logo from '../../assets/logo.png';
+import profile from '../../assets/profile.jpg';
 
 interface TopNavProps {
   user: User | null;
@@ -37,7 +38,7 @@ export function TopNav({ user }: TopNavProps) {
             <p className="text-[11px] font-medium text-mfu-text-main">{user?.name}</p>
           </div>
           <div className="relative group">
-            <img src="https://picsum.photos/seed/student/100/100" alt="Avatar" className="w-10 h-10 rounded-full border border-mfu-border cursor-pointer" referrerPolicy="no-referrer" />
+            <img src={profile} alt="Avatar" className="w-10 h-10 rounded-full border border-mfu-border cursor-pointer" referrerPolicy="no-referrer" />
             <ChevronDown size={14} className="absolute -right-1 bottom-0 bg-white rounded-full border border-mfu-border" />
           </div>
         </div>
