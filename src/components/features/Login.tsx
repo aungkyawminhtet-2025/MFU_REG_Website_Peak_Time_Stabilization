@@ -1,8 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Eye, EyeOff } from 'lucide-react';
-import logo from '../../assets/logo.png';
-import { LuLockKeyhole } from "react-icons/lu";
 
 interface LoginProps {
   handleLogin: (e: React.FormEvent) => void;
@@ -15,7 +13,7 @@ export function Login({ handleLogin, showPassword, setShowPassword }: LoginProps
     <div className="min-h-screen flex flex-col bg-mfu-bg">
       <header className="h-16 bg-white border-b border-mfu-border flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
-          <img src={logo} alt="MFU" className="h-14" />
+          <img src="https://upload.wikimedia.org/wikipedia/th/a/a2/Mae_Fah_Luang_University_Logo.png" alt="MFU" className="h-14" referrerPolicy="no-referrer" />
           <div className="h-10 w-[1px] bg-slate-200" />
           <div>
             <h1 className="text-xl font-bold text-mfu-text-main leading-none tracking-tight">PORTAL.MFU</h1>
@@ -67,7 +65,7 @@ export function Login({ handleLogin, showPassword, setShowPassword }: LoginProps
             </div>
             
             <button type="submit" className="w-40 mx-auto flex items-center justify-center gap-2 border border-mfu-red rounded-full py-2 text-mfu-red font-bold hover:bg-mfu-red hover:text-white transition-all">
-              <LuLockKeyhole size={18} />
+              <img src="https://portal.mfu.ac.th/login/assets/img/sso-icon.png" alt="SSO" className="w-5 h-5" referrerPolicy="no-referrer" />
               MFU SSO
             </button>
           </form>

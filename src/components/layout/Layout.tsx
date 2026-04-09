@@ -57,7 +57,7 @@ export function Layout({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="bg-mfu-red text-white text-center py-2 text-xs font-bold flex items-center justify-center gap-2 overflow-hidden"
+            className="bg-mfu-red text-white text-center py-2 text-sm font-bold flex items-center justify-center gap-2 overflow-hidden"
           >
             <ShieldAlert size={14} />
             SYSTEM NOTICE: HIGH TRAFFIC DETECTED. VIRTUAL QUEUEING IS ACTIVE.
@@ -70,10 +70,10 @@ export function Layout({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="bg-slate-800 text-white px-8 py-2 text-xs font-bold flex items-center justify-between gap-4 border-t border-slate-700"
+            className="bg-slate-800 text-white px-8 py-2 text-sm font-bold flex items-center justify-between gap-4 border-t border-slate-700"
           >
             <div className="flex items-center gap-4">
-              <span className="text-mfu-red uppercase text-[10px]">Registration Queue</span>
+              <span className="text-mfu-red uppercase text-xs">Registration Queue</span>
               <span className="flex items-center gap-1.5">
                 <Users size={14} className="text-mfu-red" />
                 Position: <span className="text-mfu-red">{preRegQueuePosition}</span>
@@ -88,7 +88,7 @@ export function Layout({
                 setActiveQueueType('pre-reg');
                 setView('queue');
               }}
-              className="text-[10px] uppercase tracking-wider bg-mfu-red hover:bg-red-700 px-3 py-1 rounded transition-colors"
+              className="text-xs uppercase tracking-wider bg-mfu-red hover:bg-red-700 px-3 py-1 rounded transition-colors"
             >
               View Queue
             </button>
@@ -101,10 +101,10 @@ export function Layout({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="bg-slate-700 text-white px-8 py-2 text-xs font-bold flex items-center justify-between gap-4 border-t border-slate-600"
+            className="bg-slate-700 text-white px-8 py-2 text-sm font-bold flex items-center justify-between gap-4 border-t border-slate-600"
           >
             <div className="flex items-center gap-4">
-              <span className="text-mfu-red uppercase text-[10px]">Grades Queue</span>
+              <span className="text-mfu-red uppercase text-xs">Grades Queue</span>
               <span className="flex items-center gap-1.5">
                 <Users size={14} className="text-mfu-red" />
                 Position: <span className="text-mfu-red">{gradesQueuePosition}</span>
@@ -119,7 +119,7 @@ export function Layout({
                 setActiveQueueType('grades');
                 setView('queue');
               }}
-              className="text-[10px] uppercase tracking-wider bg-mfu-red hover:bg-red-700 px-3 py-1 rounded transition-colors"
+              className="text-xs uppercase tracking-wider bg-mfu-red hover:bg-red-700 px-3 py-1 rounded transition-colors"
             >
               View Queue
             </button>

@@ -17,17 +17,17 @@ export function SearchInstructor() {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h2 className="text-5xl font-medium text-mfu-text-main">Search Instructor Schedule</h2>
+        <h2 className="text-2xl font-medium text-mfu-text-main">Search Instructor Schedule</h2>
       </div>
 
-      <div className="mfu-card p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-end">
+      <div className="mfu-card p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-end">
           <div className="space-y-2">
             <label className="text-sm font-bold text-mfu-text-main">Search by Name</label>
             <div className="relative">
               <input 
                 type="text" 
-                placeholder="Enter Instructor Name" 
+                placeholder="Please Enter Name To Search" 
                 className="mfu-input pr-10"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -40,7 +40,7 @@ export function SearchInstructor() {
             <div className="relative">
               <input 
                 type="text" 
-                placeholder="Enter Surname" 
+                placeholder="Please Enter Surname To Search" 
                 className="mfu-input pr-10"
                 value={searchSurname}
                 onChange={(e) => setSearchSurname(e.target.value)}
@@ -73,7 +73,7 @@ export function SearchInstructor() {
 
       {searchTerm || searchSurname || selectedSchool !== 'All' ? (
         <div className="mfu-card overflow-hidden">
-          <table className="mfu-table">
+          <table className="mfu-table text-sm">
             <thead>
               <tr className="bg-mfu-red text-white">
                 <th className="text-white">Name</th>

@@ -6,7 +6,7 @@ export function EnrollmentResults() {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h2 className="text-5xl font-medium text-mfu-text-main">Enrollment Results</h2>
+        <h2 className="text-2xl font-medium text-mfu-text-main">Enrollment Results</h2>
       </div>
 
       <div className="flex gap-4">
@@ -18,8 +18,8 @@ export function EnrollmentResults() {
         </button>
       </div>
 
-      <div className="mfu-card p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="mfu-card p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-sm font-bold text-mfu-text-main">
               <span className="text-red-500 mr-1">*</span> Academic Year
@@ -59,7 +59,7 @@ export function EnrollmentResults() {
           </p>
 
           <div className="overflow-x-auto">
-            <table className="mfu-table">
+            <table className="mfu-table text-sm">
               <thead>
                 <tr className="bg-mfu-red text-white">
                   <th className="text-white">Course Code</th>

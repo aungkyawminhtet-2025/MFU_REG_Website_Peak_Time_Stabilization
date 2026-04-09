@@ -1,5 +1,5 @@
 {
   "name": "MFU REG Peak-Time Stabilizer",
-  "description": "A prototype for the MFU REG website featuring peak-time stabilization, virtual queueing, and transactional course registration.",
+  "description": "A prototype for the MFU REG website featuring peak-time stabilization, virtual queueing, transactional course registration, and an AI-powered registration assistant.",
   "requestFramePermissions": []
 }

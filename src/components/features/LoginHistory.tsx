@@ -6,11 +6,11 @@ export function LoginHistory() {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
-        <h2 className="text-5xl font-medium text-mfu-text-main">Login History</h2>
+        <h2 className="text-2xl font-medium text-mfu-text-main">Login History</h2>
       </div>
 
-      <div className="mfu-card p-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+      <div className="mfu-card p-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
           <div className="space-y-2">
             <div className="relative">
               <select className="mfu-input appearance-none pr-10">
@@ -59,7 +59,7 @@ export function LoginHistory() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="mfu-table">
+          <table className="mfu-table text-sm">
             <thead>
               <tr className="bg-mfu-red text-white">
                 <th className="text-white">No.</th>

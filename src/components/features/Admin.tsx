@@ -126,7 +126,38 @@ export function Admin({
             </div>
           </div>
         </div>
+      </div>
 
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="mfu-card p-6 space-y-4">
+          <h3 className="text-lg font-bold text-mfu-text-main">System Configuration</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
+              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Banner Cache TTL</p>
+              <div className="flex items-center gap-2">
+                <p className="text-xl font-bold text-mfu-red">10s</p>
+                <span className="text-[8px] bg-red-100 text-mfu-red px-1 rounded font-bold uppercase">Optimized</span>
+              </div>
+              <p className="text-[9px] text-mfu-text-muted italic">Reduced from 60s (DEF-08)</p>
+            </div>
+            <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
+              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Read-Side Cache</p>
+              <p className="text-xl font-bold text-green-600">Active</p>
+              <p className="text-[9px] text-mfu-text-muted italic">Redis Cluster (3 Nodes)</p>
+            </div>
+            <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
+              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Transaction Isolation</p>
+              <p className="text-xl font-bold text-mfu-text-main">Serializable</p>
+              <p className="text-[9px] text-mfu-text-muted italic">ACID Compliant (PostgreSQL)</p>
+            </div>
+            <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
+              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Autoscaling</p>
+              <p className="text-xl font-bold text-mfu-text-main">4 Instances</p>
+              <p className="text-[9px] text-mfu-text-muted italic">Target CPU: 70%</p>
+            </div>
+          </div>
+        </div>
 
         <div className="mfu-card p-6 space-y-4">
           <h3 className="text-lg font-bold text-mfu-text-main">System Logs</h3>
@@ -171,7 +202,7 @@ export function Admin({
              {MOCK_COURSES.map(course => (
                <tr key={course.id}>
                  <td className="font-bold text-mfu-red">{course.code}</td>
-                 <td className="text-base">{course.name}</td>
+                 <td className="text-sm">{course.name}</td>
                  <td className="text-center font-bold">{courseCapacities[course.id]}</td>
                  <td>
                    <div className="flex items-center gap-2">
