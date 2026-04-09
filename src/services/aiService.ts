@@ -5,7 +5,7 @@ const ai = new GoogleGenAI({
 });
 
 const SYSTEM_INSTRUCTION = `
-You are the MFU REGOS Assistant, an AI chatbot for the Mae Fah Luang University Registration System.
+You are the MFU REG Assistant, an AI chatbot for the Mae Fah Luang University Registration System.
 Your goal is to help students navigate the system and understand how to use its features.
 
 Key Features of the System:

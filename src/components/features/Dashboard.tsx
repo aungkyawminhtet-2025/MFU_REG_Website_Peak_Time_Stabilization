@@ -40,8 +40,8 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
               <TrendingUp size={20} />
             </div>
             <div>
-              <p className="text-sm font-bold text-amber-900">System Alert: High Traffic Mode Active</p>
-              <p className="text-xs text-amber-700">The virtual waiting room is currently active for Registration and Grades. Expect delays.</p>
+              <p className="text-base font-bold text-amber-900">System Alert: High Traffic Mode Active</p>
+              <p className="text-base text-amber-700">The virtual waiting room is currently active for Registration and Grades. Expect delays.</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -66,19 +66,19 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
                     <ClipboardList size={32} className="text-mfu-text-muted opacity-20" />
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-mfu-text-muted uppercase tracking-widest">No active registrations</p>
-                    <p className="text-xs text-mfu-text-muted mt-1">Start your pre-registration to see courses here.</p>
+                    <p className="text-base font-bold text-mfu-text-muted uppercase tracking-widest">No active registrations</p>
+                    <p className="text-base text-mfu-text-muted mt-1">Start your pre-registration to see courses here.</p>
                   </div>
                   <button
                     onClick={() => navigateToProtectedView('pre-reg')}
-                    className="px-6 py-2 bg-mfu-red text-white text-xs font-bold rounded-lg hover:bg-red-800 transition-all"
+                    className="px-6 py-2 bg-mfu-red text-white text-base font-bold rounded-lg hover:bg-red-800 transition-all"
                   >
                     Go to Pre-Registration
                   </button>
                 </div>
               ) : (
                <div className="overflow-x-auto">
-                 <table className="mfu-table text-sm">
+                 <table className="mfu-table text-base">
                    <thead>
                      <tr>
                        <th>Code</th>
@@ -93,8 +93,8 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
                        return (
                          <tr key={id}>
                            <td className="font-bold text-mfu-red">{course?.code}</td>
-                           <td className="text-sm">{course?.name}</td>
-                           <td className="text-sm text-center font-bold">{course?.credits}</td>
+                           <td className="text-base">{course?.name}</td>
+                           <td className="text-base text-center font-bold">{course?.credits}</td>
                            <td className="text-right">
                              <button
                                onClick={() => handleDropCourse(id, true)}
@@ -121,20 +121,20 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
              <div className="mfu-card p-4 flex items-center gap-4 hover:border-mfu-red/30 transition-all cursor-pointer group">
                <div className="w-10 h-10 bg-red-50 text-mfu-red rounded flex flex-col items-center justify-center border border-red-100 font-bold shrink-0">
                  <span className="text-[8px] uppercase">Apr</span>
-                 <span className="text-sm leading-none">15</span>
+                 <span className="text-base leading-none">15</span>
                </div>
                <div>
-                 <p className="text-xs font-bold text-mfu-text-main group-hover:text-mfu-red transition-colors">Graduation Application</p>
+                 <p className="text-base font-bold text-mfu-text-main group-hover:text-mfu-red transition-colors">Graduation Application</p>
                  <p className="text-[10px] text-mfu-text-muted">Academic Year 2/2025</p>
                </div>
              </div>
              <div className="mfu-card p-4 flex items-center gap-4 hover:border-mfu-red/30 transition-all cursor-pointer group">
                <div className="w-10 h-10 bg-slate-50 text-mfu-text-main rounded flex flex-col items-center justify-center border border-slate-200 font-bold shrink-0">
                  <span className="text-[8px] uppercase">May</span>
-                 <span className="text-sm leading-none">02</span>
+                 <span className="text-base leading-none">02</span>
                </div>
                <div>
-                 <p className="text-xs font-bold text-mfu-text-main group-hover:text-mfu-red transition-colors">Final Exam Period</p>
+                 <p className="text-base font-bold text-mfu-text-main group-hover:text-mfu-red transition-colors">Final Exam Period</p>
                  <p className="text-[10px] text-mfu-text-muted">Academic Year 2/2025</p>
                </div>
              </div>
@@ -149,7 +149,7 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
            {['Bachelor\'s Degree'].map((degree) => (
              <div key={degree} className="mfu-card overflow-hidden">
                <div className="p-4 bg-slate-50/50 border-b border-mfu-border flex justify-between items-center">
-                 <span className="text-sm font-bold">{degree} - April 2026</span>
+                 <span className="text-base font-bold">{degree} - April 2026</span>
                  <ChevronRight size={16} className="text-mfu-text-muted" />
                </div>
               
@@ -193,19 +193,19 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
              </div>
              <div>
                <h3 className="text-lg font-bold text-mfu-text-main leading-tight">{user?.name}</h3>
-               <p className="text-xs font-bold text-mfu-red">ID: {user?.id}</p>
+               <p className="text-base font-bold text-mfu-red">ID: {user?.id}</p>
              </div>
            </div>
 
 
            <div className="grid grid-cols-2 gap-2">
              <div className="bg-white p-2 rounded border border-mfu-border text-center">
-               <p className="text-[8px] font-bold text-mfu-text-muted uppercase">GPAX</p>
-               <p className="text-sm font-bold text-mfu-red">3.85</p>
+               <p className="text-[12px] font-bold text-mfu-text-muted uppercase">GPAX</p>
+               <p className="text-base font-bold text-mfu-red">3.85</p>
              </div>
              <div className="bg-white p-2 rounded border border-mfu-border text-center">
-               <p className="text-[8px] font-bold text-mfu-text-muted uppercase">Credits</p>
-               <p className="text-sm font-bold text-mfu-text-main">42</p>
+               <p className="text-[12px] font-bold text-mfu-text-muted uppercase">Credits</p>
+               <p className="text-base font-bold text-mfu-text-main">42</p>
              </div>
            </div>
          </div>
@@ -213,7 +213,7 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
 
          {/* Academic Progress - Moved to Sidebar and Simplified */}
          <div className="mfu-card p-5 space-y-4">
-           <h3 className="text-xs font-bold text-mfu-text-main flex items-center gap-2 uppercase tracking-widest">
+           <h3 className="text-base font-bold text-mfu-text-main flex items-center gap-2 uppercase tracking-widest">
              <TrendingUp size={14} className="text-mfu-red" />
              Degree Progress
            </h3>

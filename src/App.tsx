@@ -153,9 +153,9 @@ export default function App() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setUser({ id: '6831503002', name: 'Aung Kyaw Phyo', email: '6831503002@lamduan.mfu.ac.th' });
+    setUser({ id: '6831503000', name: 'Admin', email: '6831503000@lamduan.mfu.ac.th' });
     setView('dashboard');
-    addNotification('Welcome back, Aung Kyaw Phyo', 'success');
+    addNotification('Welcome back, Admin', 'success');
   };
 
   const toggleMenu = (menu: string) => {

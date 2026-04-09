@@ -40,7 +40,7 @@ export function Admin({
         <h2 className="text-4xl font-medium text-mfu-text-main">Admin Monitoring Dashboard</h2>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-mfu-text-muted uppercase">Pre-Reg Peak:</span>
+            <span className="text-base font-bold text-mfu-text-muted uppercase">Pre-Reg Peak:</span>
             <button
               onClick={() => {
                 setIsPreRegPeakMode(!isPreRegPeakMode);
@@ -52,7 +52,7 @@ export function Admin({
             </button>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-xs font-bold text-mfu-text-muted uppercase">Grades Peak:</span>
+            <span className="text-base font-bold text-mfu-text-muted uppercase">Grades Peak:</span>
             <button
               onClick={() => {
                 setIsGradesPeakMode(!isGradesPeakMode);
@@ -86,21 +86,21 @@ export function Admin({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="mfu-card p-6 space-y-2">
-          <p className="text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Active Users</p>
+          <p className="text-base font-bold text-mfu-text-muted uppercase tracking-widest">Active Users</p>
           <p className="text-3xl font-bold text-mfu-text-main">{systemMetrics.activeUsers}</p>
-          <div className="text-xs text-green-600 flex items-center gap-1">
+          <div className="text-base text-green-600 flex items-center gap-1">
             <ChevronUp size={12} /> 12% from last hour
           </div>
         </div>
         <div className="mfu-card p-6 space-y-2">
-          <p className="text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Error Rate</p>
+          <p className="text-base font-bold text-mfu-text-muted uppercase tracking-widest">Error Rate</p>
           <p className="text-3xl font-bold text-mfu-text-main">{(systemMetrics.errors * 100).toFixed(2)}%</p>
-          <div className="text-xs text-green-600">Within normal range</div>
+          <div className="text-base text-green-600">Within normal range</div>
         </div>
         <div className="mfu-card p-6 space-y-2">
-          <p className="text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Queue Size</p>
+          <p className="text-base font-bold text-mfu-text-muted uppercase tracking-widest">Queue Size</p>
           <p className="text-3xl font-bold text-mfu-red">{isAnyPeakMode ? systemMetrics.queueSize.toLocaleString() : '0'}</p>
-          <div className="text-xs text-mfu-text-muted">Waiting for access</div>
+          <div className="text-base text-mfu-text-muted">Waiting for access</div>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ export function Admin({
                     className="w-full bg-mfu-red/40 rounded-t-sm hover:bg-mfu-red transition-all cursor-pointer relative group"
                     style={{ height: `${(t.value / 2500) * 100}%` }}
                   >
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-mfu-text-main text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-mfu-text-main text-white text-[15px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                       {t.value} req/s
                     </div>
                   </div>
@@ -134,7 +134,7 @@ export function Admin({
           <h3 className="text-lg font-bold text-mfu-text-main">System Configuration</h3>
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
-              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Banner Cache TTL</p>
+              <p className="text-[15px] font-bold text-mfu-text-muted uppercase tracking-widest">Banner Cache TTL</p>
               <div className="flex items-center gap-2">
                 <p className="text-xl font-bold text-mfu-red">10s</p>
                 <span className="text-[8px] bg-red-100 text-mfu-red px-1 rounded font-bold uppercase">Optimized</span>
@@ -142,17 +142,17 @@ export function Admin({
               <p className="text-[9px] text-mfu-text-muted italic">Reduced from 60s (DEF-08)</p>
             </div>
             <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
-              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Read-Side Cache</p>
+              <p className="text-[15px] font-bold text-mfu-text-muted uppercase tracking-widest">Read-Side Cache</p>
               <p className="text-xl font-bold text-green-600">Active</p>
               <p className="text-[9px] text-mfu-text-muted italic">Redis Cluster (3 Nodes)</p>
             </div>
             <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
-              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Transaction Isolation</p>
+              <p className="text-[15px] font-bold text-mfu-text-muted uppercase tracking-widest">Transaction Isolation</p>
               <p className="text-xl font-bold text-mfu-text-main">Serializable</p>
               <p className="text-[9px] text-mfu-text-muted italic">ACID Compliant (PostgreSQL)</p>
             </div>
             <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
-              <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Autoscaling</p>
+              <p className="text-[15px] font-bold text-mfu-text-muted uppercase tracking-widest">Autoscaling</p>
               <p className="text-xl font-bold text-mfu-text-main">4 Instances</p>
               <p className="text-[9px] text-mfu-text-muted italic">Target CPU: 70%</p>
             </div>
@@ -161,9 +161,9 @@ export function Admin({
 
         <div className="mfu-card p-6 space-y-4">
           <h3 className="text-lg font-bold text-mfu-text-main">System Logs</h3>
-          <div className="space-y-3 text-xs font-mono max-h-[260px] overflow-y-auto pr-2">
+          <div className="space-y-3 text-base font-mono max-h-[260px] overflow-y-auto pr-2">
             <div className="p-2 bg-slate-50 rounded border-l-2 border-green-500">
-              <span className="text-mfu-text-muted">[09:42:11]</span> INFO: User 6831503002 authenticated via SSO.
+              <span className="text-mfu-text-muted">[09:42:11]</span> INFO: User 6831503000 authenticated via SSO.
             </div>
             <div className="p-2 bg-slate-50 rounded border-l-2 border-blue-500">
               <span className="text-mfu-text-muted">[09:43:05]</span> INFO: Transaction committed for Course 1006134.
@@ -238,7 +238,7 @@ export function Admin({
                      >
                        +
                      </button>
-                     <span className="text-[10px] text-mfu-text-muted ml-1">Seats</span>
+                     <span className="text-[15px] text-mfu-text-muted ml-1">Seats</span>
                    </div>
                  </td>
                </tr>
