@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ShieldAlert, ChevronUp, FileSearch } from 'lucide-react';
+import { ShieldAlert, ChevronUp, FileSearch, Trash2, Users } from 'lucide-react';
 import { MOCK_COURSES } from '../../constants';
 import { Notification } from '../../types';
 
@@ -11,6 +11,9 @@ interface AdminProps {
   isGradesPeakMode: boolean;
   setIsGradesPeakMode: (peak: boolean) => void;
   addNotification: (message: string, type: Notification['type']) => void;
+  preRegTraffic: number;
+  gradesTraffic: number;
+  onResetDemo: () => void;
   systemMetrics: {
     activeUsers: number;
     errors: number;
@@ -28,6 +31,9 @@ export function Admin({
   isGradesPeakMode,
   setIsGradesPeakMode,
   addNotification,
+  preRegTraffic,
+  gradesTraffic,
+  onResetDemo,
   systemMetrics,
   courseCapacities,
   setCourseCapacities
@@ -36,33 +42,44 @@ export function Admin({
 
   return (
     <div className="space-y-8 pb-20">
-      <div className="flex justify-between items-center">
-        <h2 className="text-4xl font-medium text-mfu-text-main">Admin Monitoring Dashboard</h2>
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-3">
-            <span className="text-base font-bold text-mfu-text-muted uppercase">Pre-Reg Peak:</span>
-            <button
-              onClick={() => {
-                setIsPreRegPeakMode(!isPreRegPeakMode);
-                addNotification(`Pre-Reg Peak Mode ${!isPreRegPeakMode ? 'Enabled' : 'Disabled'}`, !isPreRegPeakMode ? 'error' : 'success');
-              }}
-              className={`w-12 h-6 rounded-full transition-all relative ${isPreRegPeakMode ? 'bg-mfu-red' : 'bg-slate-300'}`}
-            >
-              <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isPreRegPeakMode ? 'left-7' : 'left-1'}`} />
-            </button>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-base font-bold text-mfu-text-muted uppercase">Grades Peak:</span>
-            <button
-              onClick={() => {
-                setIsGradesPeakMode(!isGradesPeakMode);
-                addNotification(`Grades Peak Mode ${!isGradesPeakMode ? 'Enabled' : 'Disabled'}`, !isGradesPeakMode ? 'error' : 'success');
-              }}
-              className={`w-12 h-6 rounded-full transition-all relative ${isGradesPeakMode ? 'bg-mfu-red' : 'bg-slate-300'}`}
-            >
-              <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isGradesPeakMode ? 'left-7' : 'left-1'}`} />
-            </button>
-          </div>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-2xl md:text-4xl font-medium text-mfu-text-main">Admin Monitoring Dashboard</h2>
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
+          <button 
+            onClick={onResetDemo}
+            className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-mfu-text-main font-bold rounded-lg hover:bg-slate-200 transition-all text-sm whitespace-nowrap"
+          >
+            <Trash2 size={16} />
+            Reset Demo
+          </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 bg-white p-4 rounded-xl border border-mfu-border shadow-sm">
+        <div className="flex items-center justify-between md:justify-start gap-3 flex-1">
+          <span className="text-xs md:text-base font-bold text-mfu-text-muted uppercase">Pre-Reg Peak:</span>
+          <button
+            onClick={() => {
+              setIsPreRegPeakMode(!isPreRegPeakMode);
+              addNotification(`Pre-Reg Peak Mode ${!isPreRegPeakMode ? 'Enabled' : 'Disabled'}`, !isPreRegPeakMode ? 'error' : 'success');
+            }}
+            className={`w-12 h-6 rounded-full transition-all relative shrink-0 ${isPreRegPeakMode ? 'bg-mfu-red' : 'bg-slate-300'}`}
+          >
+            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isPreRegPeakMode ? 'left-7' : 'left-1'}`} />
+          </button>
+        </div>
+        <div className="hidden md:block w-px h-6 bg-slate-200" />
+        <div className="flex items-center justify-between md:justify-start gap-3 flex-1">
+          <span className="text-xs md:text-base font-bold text-mfu-text-muted uppercase">Grades Peak:</span>
+          <button
+            onClick={() => {
+              setIsGradesPeakMode(!isGradesPeakMode);
+              addNotification(`Grades Peak Mode ${!isGradesPeakMode ? 'Enabled' : 'Disabled'}`, !isGradesPeakMode ? 'error' : 'success');
+            }}
+            className={`w-12 h-6 rounded-full transition-all relative shrink-0 ${isGradesPeakMode ? 'bg-mfu-red' : 'bg-slate-300'}`}
+          >
+            <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${isGradesPeakMode ? 'left-7' : 'left-1'}`} />
+          </button>
         </div>
       </div>
 
@@ -84,7 +101,45 @@ export function Admin({
       )}
 
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="mfu-card p-6 space-y-4 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+            <Users size={32} className="text-mfu-red" />
+          </div>
+          <p className="text-sm font-bold text-mfu-text-muted uppercase tracking-widest">Simulated Traffic</p>
+          
+          <div className="space-y-3">
+             <div className="space-y-1">
+               <div className="flex justify-between text-[11px] font-bold">
+                 <span>Registration</span>
+                 <span className="text-mfu-red">{preRegTraffic} / 7</span>
+               </div>
+               <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                 <motion.div 
+                    animate={{ width: `${(preRegTraffic / 7) * 100}%` }}
+                    className={`h-full ${preRegTraffic >= 7 ? 'bg-red-600' : preRegTraffic >= 4 ? 'bg-amber-500' : 'bg-mfu-red'}`} 
+                 />
+               </div>
+             </div>
+
+             <div className="space-y-1">
+               <div className="flex justify-between text-[11px] font-bold">
+                 <span>Grades</span>
+                 <span className="text-mfu-red">{gradesTraffic} / 7</span>
+               </div>
+               <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                 <motion.div 
+                    animate={{ width: `${(gradesTraffic / 7) * 100}%` }}
+                    className={`h-full ${gradesTraffic >= 7 ? 'bg-red-600' : gradesTraffic >= 4 ? 'bg-amber-500' : 'bg-mfu-red'}`} 
+                 />
+               </div>
+             </div>
+          </div>
+
+          <p className="text-[10px] text-mfu-text-muted italic mt-1 font-bold">
+            Clicks separate for each page
+          </p>
+        </div>
         <div className="mfu-card p-6 space-y-2">
           <p className="text-base font-bold text-mfu-text-muted uppercase tracking-widest">Active Users</p>
           <p className="text-3xl font-bold text-mfu-text-main">{systemMetrics.activeUsers}</p>
@@ -106,9 +161,9 @@ export function Admin({
 
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="mfu-card p-6 space-y-4 overflow-hidden">
-          <h3 className="text-lg font-bold text-mfu-text-main">Traffic Metrics (Requests/sec)</h3>
-          <div className="overflow-x-auto pb-4">
+        <div className="mfu-card p-4 md:p-6 space-y-4 overflow-hidden">
+          <h3 className="text-base md:text-lg font-bold text-mfu-text-main">Traffic Metrics (Requests/sec)</h3>
+          <div className="overflow-x-auto pb-4 -mx-4 md:mx-0 px-4 md:px-0">
             <div className="h-64 min-w-[600px] bg-slate-50 rounded-lg flex items-end justify-between p-4 gap-2">
               {systemMetrics.traffic.map((t, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
@@ -132,7 +187,7 @@ export function Admin({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="mfu-card p-6 space-y-4">
           <h3 className="text-lg font-bold text-mfu-text-main">System Configuration</h3>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-4 bg-slate-50 rounded-lg border border-slate-100 space-y-1">
               <p className="text-[15px] font-bold text-mfu-text-muted uppercase tracking-widest">Banner Cache TTL</p>
               <div className="flex items-center gap-2">

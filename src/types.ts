@@ -1,4 +1,4 @@
-export type View = 'login' | 'dashboard' | 'schedule' | 'grades' | 'pre-reg' | 'exit-exam' | 'admin' | 'queue' | 'enrollment-results' | 'search-instructor' | 'login-history';
+export type View = 'login' | 'dashboard' | 'schedule' | 'grades' | 'pre-reg' | 'exit-exam' | 'admin' | 'queue' | 'enrollment-results' | 'search-instructor' | 'login-history' | 'server-error';
 
 export interface Course {
   id: string;

@@ -21,6 +21,7 @@ import { EnrollmentResults } from './components/features/EnrollmentResults';
 import { SearchInstructor } from './components/features/SearchInstructor';
 import { LoginHistory } from './components/features/LoginHistory';
 import { ChatBot } from './components/features/ChatBot';
+import { ServerNotFoundError } from './components/features/ServerNotFoundError';
 
 export default function App() {
   const [view, setView] = useState<View>('login');
@@ -44,6 +45,10 @@ export default function App() {
   const [hasGradesAccessToken, setHasGradesAccessToken] = useState(false);
   const [queuedTargetView, setQueuedTargetView] = useState<View | null>(null);
   const [activeQueueType, setActiveQueueType] = useState<'pre-reg' | 'grades' | null>(null);
+
+  // Demo Specific States (Split for separate tracking)
+  const [preRegTraffic, setPreRegTraffic] = useState(0);
+  const [gradesTraffic, setGradesTraffic] = useState(0);
 
   // Grades State
   const [selectedTerm, setSelectedTerm] = useState('1/2025');
@@ -71,6 +76,39 @@ export default function App() {
   });
 
   // --- Effects ---
+
+  // Traffic Decay Effect: Slowly reduce traffic over time to simulate load subsiding
+  useEffect(() => {
+    const decayInterval = setInterval(() => {
+      setPreRegTraffic(prev => Math.max(0, prev - 0.5));
+      setGradesTraffic(prev => Math.max(0, prev - 0.5));
+    }, 5000); // Reduce traffic by 0.5 every 5 seconds (FASTER)
+    
+    return () => clearInterval(decayInterval);
+  }, []);
+
+  // Handle peak mode toggling off by admin or decay
+  useEffect(() => {
+    if (!isPreRegPeakMode && !isGradesPeakMode) {
+      if (isPreRegQueued) setIsPreRegQueued(false);
+      if (isGradesQueued) setIsGradesQueued(false);
+      
+      if (view === 'queue') {
+        setView('dashboard');
+        addNotification('Peak load period has ended.', 'info');
+      }
+    } else {
+      // If one turned off but the other is still on, clear the inactive one's queue state
+      if (!isPreRegPeakMode && isPreRegQueued) {
+        setIsPreRegQueued(false);
+        if (activeQueueType === 'pre-reg' && view === 'queue') setView('dashboard');
+      }
+      if (!isGradesPeakMode && isGradesQueued) {
+        setIsGradesQueued(false);
+        if (activeQueueType === 'grades' && view === 'queue') setView('dashboard');
+      }
+    }
+  }, [isPreRegPeakMode, isGradesPeakMode, view, isPreRegQueued, isGradesQueued, activeQueueType]);
 
   useEffect(() => {
     if (notifications.length > 0) {
@@ -106,29 +144,60 @@ export default function App() {
     };
   }, [isPreRegQueued, preRegQueuePosition, isGradesQueued, gradesQueuePosition]);
 
+  // Simulated traffic detection effect
+  useEffect(() => {
+    // Separate peak mode triggers
+    if (preRegTraffic >= 4 && !isPreRegPeakMode) {
+      setIsPreRegPeakMode(true);
+      addNotification('Registration system is experiencing peak load.', 'info');
+    } else if (preRegTraffic < 1 && isPreRegPeakMode) {
+      setIsPreRegPeakMode(false);
+      addNotification('Registration system traffic has normalized.', 'success');
+    }
+    
+    if (gradesTraffic >= 4 && !isGradesPeakMode) {
+      setIsGradesPeakMode(true);
+      addNotification('Grade Result system is experiencing peak load.', 'info');
+    } else if (gradesTraffic < 1 && isGradesPeakMode) {
+      setIsGradesPeakMode(false);
+      addNotification('Grade Result system traffic has normalized.', 'success');
+    }
+
+    // Server Error trigger (if either major path hits extreme load)
+    if (preRegTraffic >= 7 || gradesTraffic >= 7) {
+      if (view !== 'server-error' && view !== 'login') {
+        setView('server-error');
+      }
+    }
+  }, [preRegTraffic, gradesTraffic, isPreRegPeakMode, isGradesPeakMode, view]);
+
   // Handle redirection when queue reaches zero
   useEffect(() => {
     if (isPreRegQueued && preRegQueuePosition === 0) {
       setHasPreRegAccessToken(true);
       setIsPreRegQueued(false);
+      setPreRegQueuePosition(0); 
       addNotification('Registration Access granted!', 'success');
-      if (queuedTargetView === 'pre-reg') {
+      // Automatic redirection even if on error page
+      if (queuedTargetView === 'pre-reg' || view === 'queue' || view === 'server-error') {
         setView('pre-reg');
-        setQueuedTargetView(null);
-        setActiveQueueType(null);
       }
+      setQueuedTargetView(null);
+      setActiveQueueType(null);
     }
     if (isGradesQueued && gradesQueuePosition === 0) {
       setHasGradesAccessToken(true);
       setIsGradesQueued(false);
+      setGradesQueuePosition(0);
       addNotification('Grades Access granted!', 'success');
-      if (queuedTargetView === 'grades') {
+      // Automatic redirection even if on error page
+      if (queuedTargetView === 'grades' || view === 'queue' || view === 'server-error') {
         setView('grades');
-        setQueuedTargetView(null);
-        setActiveQueueType(null);
       }
+      setQueuedTargetView(null);
+      setActiveQueueType(null);
     }
-  }, [isPreRegQueued, preRegQueuePosition, isGradesQueued, gradesQueuePosition, queuedTargetView]);
+  }, [isPreRegQueued, preRegQueuePosition, isGradesQueued, gradesQueuePosition, queuedTargetView, view]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -148,7 +217,13 @@ export default function App() {
 
   const addNotification = (message: string, type: Notification['type']) => {
     const id = Math.random().toString(36).substr(2, 9);
-    setNotifications(prev => [...prev, { id, message, type }]);
+    setNotifications(prev => {
+      const next = [...prev, { id, message, type }];
+      if (next.length > 3) {
+        return next.slice(-3); // Keep only the 3 most recent
+      }
+      return next;
+    });
   };
 
   const handleLogin = (e: React.FormEvent) => {
@@ -167,6 +242,13 @@ export default function App() {
   const navigateToProtectedView = (targetView: View) => {
     const isPreRegTarget = targetView === 'pre-reg';
     const isGradesTarget = targetView === 'grades';
+    
+    // Independent traffic incrementing
+    if (isPreRegTarget) {
+      setPreRegTraffic(prev => prev + 1);
+    } else if (isGradesTarget) {
+      setGradesTraffic(prev => prev + 1);
+    }
     
     if (isPreRegTarget && isPreRegPeakMode && !hasPreRegAccessToken) {
       if (!isPreRegQueued) {
@@ -259,6 +341,25 @@ export default function App() {
     setView('login');
   };
 
+  const handleResetDemo = () => {
+    setPreRegTraffic(0);
+    setGradesTraffic(0);
+    setIsPreRegPeakMode(false);
+    setIsGradesPeakMode(false);
+    setIsPreRegQueued(false);
+    setPreRegQueuePosition(0);
+    setPreRegEta(0);
+    setIsGradesQueued(false);
+    setGradesQueuePosition(0);
+    setGradesEta(0);
+    setHasPreRegAccessToken(false);
+    setHasGradesAccessToken(false);
+    setQueuedTargetView(null);
+    setActiveQueueType(null);
+    setView('dashboard');
+    addNotification('Demo environment and traffic counters have been fully reset.', 'success');
+  };
+
   const handleBypassQueue = () => {
     if (activeQueueType === 'pre-reg') {
       setPreRegQueuePosition(0);
@@ -295,6 +396,7 @@ export default function App() {
       navigateToProtectedView={navigateToProtectedView}
       handleLogout={handleLogout}
       notifications={notifications}
+      removeNotification={(id) => setNotifications(prev => prev.filter(n => n.id !== id))}
     >
       {view === 'dashboard' && (
         <Dashboard 
@@ -339,6 +441,9 @@ export default function App() {
           isGradesPeakMode={isGradesPeakMode}
           setIsGradesPeakMode={setIsGradesPeakMode}
           addNotification={addNotification}
+          preRegTraffic={preRegTraffic}
+          gradesTraffic={gradesTraffic}
+          onResetDemo={handleResetDemo}
           systemMetrics={systemMetrics}
           courseCapacities={courseCapacities}
           setCourseCapacities={setCourseCapacities}
@@ -347,6 +452,7 @@ export default function App() {
       {view === 'enrollment-results' && <EnrollmentResults />}
       {view === 'search-instructor' && <SearchInstructor />}
       {view === 'login-history' && <LoginHistory />}
+      {view === 'server-error' && <ServerNotFoundError onReset={handleResetDemo} />}
       {view === 'exit-exam' && (
         <div className="flex flex-col items-center justify-center py-20 text-center space-y-6">
           <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center">

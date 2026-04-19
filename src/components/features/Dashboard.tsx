@@ -33,10 +33,10 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-center justify-between"
+          className="bg-amber-50 border border-amber-200 p-4 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center shrink-0">
               <TrendingUp size={20} />
             </div>
             <div>
@@ -55,9 +55,9 @@ export function Dashboard({ user, setView, navigateToProtectedView, submittedCou
         <div className="lg:col-span-2 space-y-8">
           {/* Main Focus: Registered Courses */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <h2 className="text-xl font-medium text-mfu-text-main">Registered Courses</h2>
-              <span className="text-[10px] font-bold text-mfu-red bg-red-50 px-2 py-1 rounded uppercase tracking-widest">Semester 2/2025</span>
+              <span className="text-[10px] font-bold text-mfu-red bg-red-50 px-2 py-1 rounded uppercase tracking-widest w-fit">Semester 2/2025</span>
             </div>
             <div className="mfu-card p-4">
               {submittedCourses.length === 0 ? (

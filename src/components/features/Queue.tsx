@@ -13,12 +13,12 @@ export function Queue({ queuePosition, eta, title = "Virtual Waiting Room", onBy
   const isRedirecting = queuePosition === 0;
 
   return (
-    <div className="flex flex-col items-center justify-center py-20 max-w-2xl mx-auto text-center space-y-8">
-      <div className={`w-24 h-24 ${isRedirecting ? 'bg-green-100 text-green-600' : 'bg-mfu-red/10 text-mfu-red'} rounded-full flex items-center justify-center animate-pulse transition-colors duration-500`}>
-        <Clock size={48} />
+    <div className="flex flex-col items-center justify-center py-10 md:py-20 max-w-2xl mx-auto text-center space-y-6 md:space-y-8 px-4">
+      <div className={`w-20 h-20 md:w-24 md:h-24 ${isRedirecting ? 'bg-green-100 text-green-600' : 'bg-mfu-red/10 text-mfu-red'} rounded-full flex items-center justify-center animate-pulse transition-colors duration-500`}>
+        <Clock size={40} className="md:w-12 md:h-12" />
       </div>
-      <div className="space-y-2">
-        <h2 className="text-4xl font-medium text-mfu-text-main">
+      <div className="space-y-1 md:space-y-2">
+        <h2 className="text-2xl md:text-4xl font-medium text-mfu-text-main">
           {isRedirecting ? "Access Granted!" : title}
         </h2>
         <p className="text-mfu-text-muted">
@@ -30,16 +30,16 @@ export function Queue({ queuePosition, eta, title = "Virtual Waiting Room", onBy
 
       {!isRedirecting && (
         <>
-          <div className="grid grid-cols-2 gap-6 w-full">
-            <div className="mfu-card p-8 space-y-2">
-              <p className="text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Your Position</p>
-              <p className="text-5xl font-bold text-mfu-red">{queuePosition}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 w-full">
+            <div className="mfu-card p-6 md:p-8 space-y-1 md:space-y-2">
+              <p className="text-[10px] md:text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Your Position</p>
+              <p className="text-4xl md:text-5xl font-bold text-mfu-red">{queuePosition}</p>
             </div>
-            <div className="mfu-card p-8 space-y-2">
-              <p className="text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Estimated Wait</p>
-              <p className="text-5xl font-bold text-mfu-text-main">
+            <div className="mfu-card p-6 md:p-8 space-y-1 md:space-y-2">
+              <p className="text-[10px] md:text-xs font-bold text-mfu-text-muted uppercase tracking-widest">Estimated Wait</p>
+              <p className="text-4xl md:text-5xl font-bold text-mfu-text-main font-mono">
                 {Math.floor(Math.round(eta * 60) / 60)}:{String(Math.round(eta * 60) % 60).padStart(2, '0')} 
-                <span className="text-xl ml-2">min</span>
+                <span className="text-lg md:text-xl ml-1 md:ml-2">min</span>
               </p>
             </div>
           </div>

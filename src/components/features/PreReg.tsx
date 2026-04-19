@@ -56,11 +56,11 @@ export function PreReg({
 
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-medium text-mfu-text-main">Pre-Registration System</h2>
-        <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold border border-blue-100">
-          <Clock size={16} />
+    <div className="space-y-6 md:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-xl md:text-2xl font-medium text-mfu-text-main">Pre-Registration System</h2>
+        <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[10px] md:text-xs font-bold border border-blue-100">
+          <Clock size={14} />
           Registration Window: OPEN
         </div>
       </div>
@@ -68,20 +68,20 @@ export function PreReg({
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
-          <div className="mfu-card p-4 space-y-4">
-            <div className="flex flex-col md:flex-row gap-4">
+          <div className="mfu-card p-3 md:p-4 space-y-4">
+            <div className="flex flex-col xl:flex-row gap-4">
               <div className="flex-1 relative">
-                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-mfu-text-muted" />
+                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-mfu-text-muted transition-colors" />
                 <input
                   type="text"
                   placeholder="Search by Course Code or Name..."
-                  className="mfu-input pl-10"
+                  className="mfu-input pl-10 focus:ring-2 focus:ring-mfu-red/20 outline-none"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <select
-                className="mfu-input md:w-64"
+                className="mfu-input xl:w-64 cursor-pointer"
                 value={selectedFaculty}
                 onChange={(e) => setSelectedFaculty(e.target.value)}
               >
@@ -91,8 +91,8 @@ export function PreReg({
             </div>
 
 
-            <div className="overflow-x-auto">
-              <table className="mfu-table text-sm">
+            <div className="overflow-x-auto -mx-3 md:mx-0 px-3 md:px-0">
+              <table className="mfu-table text-xs md:text-sm whitespace-nowrap">
                 <thead>
                   <tr>
                     <th>Code</th>

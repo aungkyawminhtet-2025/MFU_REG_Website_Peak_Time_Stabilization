@@ -11,19 +11,19 @@ interface GradesProps {
 
 export function Grades({ selectedTerm, setSelectedTerm }: GradesProps) {
  return (
-   <div className="space-y-8">
-     <div className="flex justify-between items-start">
+   <div className="space-y-6 md:space-y-8 pb-10">
+     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
        <div className="space-y-1">
-         <p className="text-sm text-mfu-text-muted">Grade Results</p>
-         <h2 className="text-2xl font-medium text-mfu-text-main">Grade Results</h2>
+         <p className="text-[11px] md:text-sm text-mfu-text-muted font-bold uppercase tracking-wider">Academic Records</p>
+         <h2 className="text-xl md:text-2xl font-medium text-mfu-text-main">Grade Results</h2>
        </div>
-       <button className="text-mfu-red hover:bg-red-50 p-2 rounded-full border border-mfu-border">
+       <button className="text-mfu-red hover:bg-red-50 p-2 md:p-3 rounded-full border border-mfu-border transition-all shadow-sm">
          <Download size={20} />
        </button>
      </div>
 
 
-     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
        <div className="mfu-card p-4 space-y-1">
          <p className="text-[10px] font-bold text-mfu-text-muted uppercase tracking-widest">Cumulative GPA</p>
          <p className="text-2xl font-bold text-mfu-red">3.85</p>
@@ -39,7 +39,7 @@ export function Grades({ selectedTerm, setSelectedTerm }: GradesProps) {
      </div>
 
 
-     <div className="mfu-card p-4 max-w-sm">
+     <div className="mfu-card p-4 w-full md:max-w-sm">
        <div className="space-y-1">
          <label className="text-xs font-bold text-mfu-text-main">Academic Year / Semester</label>
          <select
@@ -56,11 +56,11 @@ export function Grades({ selectedTerm, setSelectedTerm }: GradesProps) {
 
 
      <div className="space-y-4">
-       <div className="flex justify-between items-center">
-         <h3 className="text-xl font-medium text-mfu-text-main">Academic Year {selectedTerm.split('/')[1]}</h3>
-         <button className="flex items-center gap-2 text-mfu-red text-xs font-bold">
-           The meaning of the abbreviation
-           <Info size={16} />
+       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+         <h3 className="text-lg md:text-xl font-medium text-mfu-text-main">Academic Year {selectedTerm.split('/')[1]}</h3>
+         <button className="flex items-center gap-2 text-mfu-red text-[11px] font-bold uppercase tracking-wider text-left">
+           Grade Abbreviation Legend
+           <Info size={14} className="shrink-0" />
          </button>
        </div>
 
@@ -88,26 +88,28 @@ export function Grades({ selectedTerm, setSelectedTerm }: GradesProps) {
               </button>
             </div>
          ) : (
-           <table className="mfu-table text-sm">
-             <thead>
-               <tr>
-                 <th className="w-1/6">Course Code</th>
-                 <th className="w-1/2">Course Name</th>
-                 <th className="w-1/6">Credit</th>
-                 <th className="w-1/6 text-center">Grade</th>
-               </tr>
-             </thead>
-             <tbody>
-               {GRADES.map((grade, idx) => (
-                 <tr key={idx}>
-                   <td className="text-mfu-red underline cursor-pointer">{grade.code}</td>
-                   <td>{grade.name}</td>
-                   <td>{grade.credit}</td>
-                   <td className="text-center font-bold">{grade.grade}</td>
+           <div className="overflow-x-auto -mx-4 md:mx-0 px-4 md:px-0 scrollbar-hide">
+             <table className="mfu-table text-xs md:text-sm whitespace-nowrap">
+               <thead>
+                 <tr>
+                   <th className="md:w-1/6">Code</th>
+                   <th className="md:w-1/2">Course Name</th>
+                   <th className="md:w-1/6">Credits</th>
+                   <th className="md:w-1/6 text-center">Grade</th>
                  </tr>
-               ))}
-             </tbody>
-           </table>
+               </thead>
+               <tbody>
+                 {GRADES.map((grade, idx) => (
+                   <tr key={idx}>
+                     <td className="text-mfu-red font-bold underline cursor-pointer">{grade.code}</td>
+                     <td className="whitespace-normal min-w-[200px]">{grade.name}</td>
+                     <td className="text-center md:text-left">{grade.credit}</td>
+                     <td className="text-center font-bold text-mfu-text-main">{grade.grade}</td>
+                   </tr>
+                 ))}
+               </tbody>
+             </table>
+           </div>
          )}
        </div>
      </div>
